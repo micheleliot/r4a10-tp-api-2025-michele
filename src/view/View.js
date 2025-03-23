@@ -8,6 +8,7 @@ export class View {
     this.resultsContainer = document.getElementById("results");
     this.detailsContainer = document.getElementById("details");
     this.paginationContainer = document.getElementById("paginationContainer");
+    this.favorisListContainer = document.getElementById("liste-favoris");
   }
 
   displayResults(filmList, onClick) {
@@ -24,10 +25,22 @@ export class View {
     });
   }
 
-  displayDetails(movie, onBack) {
+  displayDetails(movie, inFavoris, onBack, onAddFav, onRmvFav) {
     this.resultsContainer.innerHTML = "";
     if (movie) {
-      this.detailsContainer.innerHTML = `
+      console.log("movie in favoris: ", movie.inFavoris);
+      if (!inFavoris) {
+        this.resultsContainer.innerHTML = `<button id="addFav">Ajouter au favoris</button>`;
+        document
+          .getElementById("addFav")
+          .addEventListener("click", () => onAddFav(movie.omdbID, movie.title));
+      } else {
+        this.resultsContainer.innerHTML = `<button id="rmvFav">Supprimer des favoris</button>`;
+        document
+          .getElementById("rmvFav")
+          .addEventListener("click", () => onRmvFav(movie.omdbID));
+      }
+      this.detailsContainer.innerHTML += `
         <h2>${movie.getTitle()} (${movie.getYear()})</h2>
         <img src="${movie.getPoster()}" alt="Affiche du film">
         <p>${movie.getPlot()}</p>
@@ -47,6 +60,21 @@ export class View {
     }
   }
 
+  /*  displayFavorisButton(movie,onClick, inFavoris) {
+    this.resultsContainer.innerHTML = "";
+    if (!inFavoris) {
+      this.resultsContainer.innerHTML = `<button id="addFav">Ajouter au favoris</button>`;
+      document
+        .getElementById("addFav")
+        .addEventListener("click", () => onClick(movie.omdbID, movie.title));
+    } else {
+      this.resultsContainer.innerHTML = `<button id="rmvFav">Supprimer des favoris</button>`;
+      document
+        .getElementById("rmvFav")
+        .addEventListener("click", () => onClick(movie.omdbID));
+    }
+  }*/
+
   displayPagination(firstgPage, lastPages, currentPage, onPageClick) {
     console.log("firstPage: ", firstgPage);
     console.log("lastPages: ", lastPages);
@@ -58,5 +86,34 @@ export class View {
       button.addEventListener("click", () => onPageClick(i));
       this.paginationContainer.appendChild(button);
     }
+  }
+
+  displayFavoris(favorislist, onRemove, onDetails) {
+    this.favorisListContainer.innerHTML = "";
+    console.log("favorislistlenght: ", favorislist.length);
+    console.log("favorislist: ", favorislist);
+    if (favorislist.length === 0) {
+      this.favorisListContainer.innerHTML =
+        "<p>Aucun favoris pour le moment.</p>";
+    } else {
+      favorislist.forEach((item) => {
+        const li = document.createElement("li");
+        const link = document.createElement("a");
+        link.textContent = item.titre;
+        link.addEventListener("click", () => onDetails(item.idOmdb));
+
+        const removeButton = document.createElement("img");
+        removeButton.src = "../../images/croix.svg";
+        removeButton.addEventListener("click", () => onRemove(item.idOmdb));
+
+        li.appendChild(link);
+        li.appendChild(removeButton);
+        this.favorisListContainer.appendChild(li);
+      });
+    }
+  }
+
+  onDetails() {
+    return this.detailsContainer;
   }
 }

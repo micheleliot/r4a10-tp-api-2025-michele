@@ -130,6 +130,11 @@ h1 {
   margin-bottom: 20px;
 }
 
+#section-favoris img {
+  height: 10px;
+  width: 10px;
+}
+
 #section-favoris h2 {
   margin-top: 0;
 }

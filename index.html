@@ -68,35 +68,7 @@
         <p>
           Cliquer sur une recherche favorite ci-dessus pour relancer celle-ci :
         </p>
-        <ul id="liste-favoris">
-          <li>
-            <span title="Cliquer pour relancer la recherche">Grenoble</span>
-            <img
-              src="images/croix.svg"
-              alt="Icone pour supprimer le favori"
-              width="15"
-              title="Cliquer pour supprimer le favori"
-            />
-          </li>
-          <li>
-            <span title="Cliquer pour relancer la recherche">Lyon</span>
-            <img
-              src="images/croix.svg"
-              alt="Icone pour supprimer le favori"
-              width="15"
-              title="Cliquer pour supprimer le favori"
-            />
-          </li>
-          <li>
-            <span title="Cliquer pour relancer la recherhe.">Web</span>
-            <img
-              src="images/croix.svg"
-              alt="Icone pour supprimer le favori"
-              width="15"
-              title="Cliquer pour supprimer le favori"
-            />
-          </li>
-        </ul>
+        <div id="liste-favoris"></div>
         <p class="info-vide">(Aucune recherche favorite)</p>
       </section>
     </main>
@@ -104,6 +76,7 @@
     <!-- Lien vers le fichier JavaScript -->
     <script src="../src/modèle/Movie.js" type="module"></script>
     <script src="../src/modèle/Search.js" type="module"></script>
+    <script src="../src/modèle/Favoris.js" type="module"></script>
     <script src="../src/view/View.js" type="module"></script>
     <script
       src="../src/controleur/indexControleur.js"

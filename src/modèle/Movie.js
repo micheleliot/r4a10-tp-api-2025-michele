@@ -1,8 +1,8 @@
+import { Favoris } from "./Favoris.js";
+
 export class Movie {
-  constructor(data) {
-    console.log("Titre du film:", data.Title);
+  constructor(data, favoris) {
     this.title = data.Title;
-    console.log("Titre du film:", this.title);
     this.year = data.Year;
     this.poster = data.Poster;
     this.genre = data.Genre;
@@ -14,10 +14,10 @@ export class Movie {
     this.Language = data.Language;
     this.awards = data.Awards;
     this.ratings = data.Ratings;
+    this.omdbID = data.imdbID;
   }
 
   getTitle() {
-    console.log("Titre: ", this.title);
     return this.title;
   }
 
