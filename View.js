@@ -1,5 +1,5 @@
 // View
-class MovieView {
+export class View {
   constructor() {
     this.searchInput = document.getElementById("searchInput");
     this.yearInput = document.getElementById("yearInput");
@@ -13,7 +13,9 @@ class MovieView {
   displayResults(filmList, onClick) {
     this.resultsContainer.innerHTML = "";
     this.detailsContainer.innerHTML = "";
+    console.log("filmList: ", filmList);
     filmList.forEach((item) => {
+      console.log("item: ", item);
       const div = document.createElement("div");
       div.textContent = `${item.Title} (${item.Year})`;
       div.style.cursor = "pointer";
@@ -24,19 +26,32 @@ class MovieView {
 
   displayDetails(movie, onBack) {
     this.resultsContainer.innerHTML = "";
-    this.detailsContainer.innerHTML = `
-      <h2>${movie.Title} (${movie.Year})</h2>
-
-      <img src="${movie.Poster}" alt="Affiche"/>
-      <p>${movie.Plot}</p>
-      <button id="backButton">Retour</button>
-    `;
-    document.getElementById("backButton").addEventListener("click", onBack);
+    if (movie) {
+      this.detailsContainer.innerHTML = `
+        <h2>${movie.getTitle()} (${movie.getYear()})</h2>
+        <img src="${movie.getPoster()}" alt="Affiche du film">
+        <p>${movie.getPlot()}</p>
+        <p><strong>Genre:</strong> ${movie.getGenre()}</p>
+        <p><strong>Runtime:</strong> ${movie.getRuntime()}</p>
+        <p><strong>Director:</strong> ${movie.getDirector()}</p>
+        <p><strong>Writer:</strong> ${movie.getWriter()}</p>
+        <p><strong>Actors:</strong> ${movie.getActors()}</p>
+        <p><strong>Language:</strong> ${movie.getLanguage()}</p>
+        <p><strong>Awards:</strong> ${movie.getAwards()}</p>
+        <p><strong>Ratings:</strong> ${JSON.stringify(movie.getRatings())}</p>
+        <button id="backButton">Retour</button>
+        `;
+      document.getElementById("backButton").addEventListener("click", onBack);
+    } else {
+      detailsContainer.innerHTML = `<p>Impossible de charger les détails.</p>`;
+    }
   }
 
-  displayPagination(currentPage, totalPages, onPageClick) {
+  displayPagination(firstgPage, lastPages, currentPage, onPageClick) {
+    console.log("firstPage: ", firstgPage);
+    console.log("lastPages: ", lastPages);
     this.paginationContainer.innerHTML = "";
-    for (let i = 1; i <= totalPages; i++) {
+    for (let i = firstgPage; i <= lastPages; i++) {
       const button = document.createElement("button");
       button.textContent = i;
       button.disabled = i === currentPage;

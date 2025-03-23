@@ -1,6 +1,8 @@
-class Movie {
+export class Movie {
   constructor(data) {
+    console.log("Titre du film:", data.Title);
     this.title = data.Title;
+    console.log("Titre du film:", this.title);
     this.year = data.Year;
     this.poster = data.Poster;
     this.genre = data.Genre;
@@ -15,6 +17,7 @@ class Movie {
   }
 
   getTitle() {
+    console.log("Titre: ", this.title);
     return this.title;
   }
 
