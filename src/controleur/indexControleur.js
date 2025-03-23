@@ -81,4 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchModel = new Search(apiKey);
   const view = new View();
   const controller = new IndexController(searchModel, view);
+  const favoris = new Favoris();
+  view.setFavoris(favoris);
 });
