@@ -1,6 +1,6 @@
-import { Movie } from "./Movie.js";
-import { View } from "./View.js";
-import { Search } from "./Search.js";
+import { Movie } from "../modèle/Movie.js";
+import { View } from "../view/View.js";
+import { Search } from "../modèle/Search.js";
 
 export class IndexController {
   constructor(model, view) {
