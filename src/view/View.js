@@ -6,7 +6,8 @@ export class View {
     this.typeSelect = document.getElementById("typeSelect");
     this.searchButton = document.getElementById("searchButton");
     this.resultsContainer = document.getElementById("results");
-    this.detailsContainer = document.getElementById("details");
+    this.detailsFavorisBtn = document.getElementById("detailsFavorisBtn");
+    this.detailsContainer = document.getElementById("detailsContent");
     this.paginationContainer = document.getElementById("paginationContainer");
     this.favorisListContainer = document.getElementById("liste-favoris");
   }
@@ -14,70 +15,100 @@ export class View {
   displayResults(filmList, onClick) {
     this.resultsContainer.innerHTML = "";
     this.detailsContainer.innerHTML = "";
-    console.log("filmList: ", filmList);
+
+    this.resultsContainer.style.display = "grid";
+    this.resultsContainer.style.gridTemplateColumns = "repeat(5, 1fr)";
+    this.resultsContainer.style.gap = "20px";
+
     filmList.forEach((item) => {
-      console.log("item: ", item);
       const div = document.createElement("div");
-      div.textContent = `${item.Title} (${item.Year})`;
       div.style.cursor = "pointer";
+      div.style.border = "1px solid #ccc";
+      div.style.borderRadius = "10px";
+      div.style.overflow = "hidden";
+      div.style.textAlign = "center";
+      div.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+      div.style.transition = "transform 0.3s ease";
+      div.addEventListener(
+        "mouseenter",
+        () => (div.style.transform = "scale(1.05)")
+      );
+      div.addEventListener(
+        "mouseleave",
+        () => (div.style.transform = "scale(1)")
+      );
       div.addEventListener("click", () => onClick(item.imdbID));
+
+      const img = document.createElement("img");
+      img.src =
+        item.Poster && item.Poster !== "N/A"
+          ? item.Poster
+          : "../../images/affiche-non-disponible.jpg"; // Remplacez par le chemin de votre image par défaut
+      img.alt = `Affiche de ${item.Title}`;
+      img.style.width = "100%";
+      img.style.height = "300px";
+      img.style.objectFit = "cover";
+
+      const title = document.createElement("p");
+      title.textContent = item.Title;
+      title.style.fontWeight = "bold";
+      title.style.margin = "10px 0 5px";
+
+      const year = document.createElement("p");
+      year.textContent = `(${item.Year})`;
+      year.style.color = "#555";
+      year.style.marginBottom = "10px";
+
+      div.appendChild(img);
+      div.appendChild(title);
+      div.appendChild(year);
+
       this.resultsContainer.appendChild(div);
     });
   }
 
-  displayDetails(movie, inFavoris, onBack, onAddFav, onRmvFav) {
+  displayDetails(movie, onBack) {
     this.resultsContainer.innerHTML = "";
     if (movie) {
-      console.log("movie in favoris: ", movie.inFavoris);
-      if (!inFavoris) {
-        this.resultsContainer.innerHTML = `<button id="addFav">Ajouter au favoris</button>`;
-        document
-          .getElementById("addFav")
-          .addEventListener("click", () => onAddFav(movie.omdbID, movie.title));
-      } else {
-        this.resultsContainer.innerHTML = `<button id="rmvFav">Supprimer des favoris</button>`;
-        document
-          .getElementById("rmvFav")
-          .addEventListener("click", () => onRmvFav(movie.omdbID));
-      }
-      this.detailsContainer.innerHTML += `
+      this.detailsContainer.innerHTML = `
         <h2>${movie.getTitle()} (${movie.getYear()})</h2>
-        <img src="${movie.getPoster()}" alt="Affiche du film">
+        <div style="display: flex; flex-direction: row;  align-items: flex-start; gap: 20px;">
+          <img src="${movie.getPoster()}" alt="Affiche du film" style="max-width: 300px; height: auto;">
+          <div>
+            <p><strong>Genre:</strong> ${movie.getGenre()}</p>
+            <p><strong>Durée:</strong> ${movie.getRuntime()}</p>
+            <p><strong>Directeur:</strong> ${movie.getDirector()}</p>
+            <p><strong>Scénario:</strong> ${movie.getWriter()}</p>
+            <p><strong>Acteurs:</strong> ${movie.getActors()}</p>
+            <p><strong>Langue:</strong> ${movie.getLanguage()}</p>
+            <div id = "ratings"></div>
+          </div>
+        </div>
         <p>${movie.getPlot()}</p>
-        <p><strong>Genre:</strong> ${movie.getGenre()}</p>
-        <p><strong>Runtime:</strong> ${movie.getRuntime()}</p>
-        <p><strong>Director:</strong> ${movie.getDirector()}</p>
-        <p><strong>Writer:</strong> ${movie.getWriter()}</p>
-        <p><strong>Actors:</strong> ${movie.getActors()}</p>
-        <p><strong>Language:</strong> ${movie.getLanguage()}</p>
-        <p><strong>Awards:</strong> ${movie.getAwards()}</p>
-        <p><strong>Ratings:</strong> ${JSON.stringify(movie.getRatings())}</p>
         <button id="backButton">Retour</button>
         `;
       document.getElementById("backButton").addEventListener("click", onBack);
+      this.displayRatings(movie.ratings);
     } else {
       detailsContainer.innerHTML = `<p>Impossible de charger les détails.</p>`;
     }
   }
 
-  /*  displayFavorisButton(movie,onClick, inFavoris) {
-    this.resultsContainer.innerHTML = "";
+  displayFavorisButton(movie, onClickAdd, onClickRmv, inFavoris) {
     if (!inFavoris) {
-      this.resultsContainer.innerHTML = `<button id="addFav">Ajouter au favoris</button>`;
+      this.detailsFavorisBtn.innerHTML = `<button id="addFav">Ajouter au favoris</button>`;
       document
         .getElementById("addFav")
-        .addEventListener("click", () => onClick(movie.omdbID, movie.title));
+        .addEventListener("click", () => onClickAdd(movie.omdbID, movie.title));
     } else {
-      this.resultsContainer.innerHTML = `<button id="rmvFav">Supprimer des favoris</button>`;
+      this.detailsFavorisBtn.innerHTML = `<button id="rmvFav">Supprimer des favoris</button>`;
       document
         .getElementById("rmvFav")
-        .addEventListener("click", () => onClick(movie.omdbID));
+        .addEventListener("click", () => onClickRmv(movie.omdbID));
     }
-  }*/
+  }
 
   displayPagination(firstgPage, lastPages, currentPage, onPageClick) {
-    console.log("firstPage: ", firstgPage);
-    console.log("lastPages: ", lastPages);
     this.paginationContainer.innerHTML = "";
     for (let i = firstgPage; i <= lastPages; i++) {
       const button = document.createElement("button");
@@ -90,8 +121,6 @@ export class View {
 
   displayFavoris(favorislist, onRemove, onDetails) {
     this.favorisListContainer.innerHTML = "";
-    console.log("favorislistlenght: ", favorislist.length);
-    console.log("favorislist: ", favorislist);
     if (favorislist.length === 0) {
       this.favorisListContainer.innerHTML =
         "<p>Aucun favoris pour le moment.</p>";
@@ -113,7 +142,17 @@ export class View {
     }
   }
 
-  onDetails() {
-    return this.detailsContainer;
+  displayRatings(ratings) {
+    const ratingsDiv = document.getElementById("ratings");
+    ratingsDiv.innerHTML = "<p><strong>Critique:</strong> </p>";
+    if (ratings.length > 0) {
+      ratings.forEach((rating) => {
+        const ratingDiv = document.createElement("div");
+        ratingDiv.innerHTML = `<p>${rating.Source}: ${rating.Value}</p>`;
+        ratingsDiv.appendChild(ratingDiv);
+      });
+    } else {
+      ratingsDiv.innerHTML += "<p>Pas de notes disponibles</p>";
+    }
   }
 }

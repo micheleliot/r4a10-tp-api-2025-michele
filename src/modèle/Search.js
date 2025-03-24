@@ -16,7 +16,6 @@ export class Search {
       }
 
       const data = await response.json();
-      console.log("Données reçues:", data);
       return data;
     } catch (error) {
       console.error("Erreur lors de la recherche des films:", error);
@@ -34,7 +33,6 @@ export class Search {
       }
 
       const data = await response.json();
-      console.log("Détails du film:", data);
       return data;
     } catch (error) {
       console.error("Erreur lors de la recherche par ID:", error);

@@ -47,18 +47,17 @@ export class IndexController {
     let data = await this.searchModel.searchById(imdbID);
     let movie = new Movie(data, this.favoris);
     this.currentMovie = movie;
+    this.refreshFavoris(this.favoris.isPresent(imdbID));
     let inFavoris = this.favoris.isPresent(movie.omdbID);
-    this.view.displayDetails(
+    this.view.displayFavorisButton(
       movie,
-      inFavoris,
-      () => this.handleBack(),
       (id, title) => this.addFavoris(id, title),
       (id) => this.removeFavoris(id)
     );
+    this.view.displayDetails(movie, () => this.handleBack());
   }
 
   handleBack() {
-    console.log("Retour à la liste des résultats.", this.savedResults);
     this.view.displayResults(this.savedResults, () => this.handleDetails());
     this.addPagination();
   }
@@ -69,10 +68,9 @@ export class IndexController {
   }
 
   addPagination() {
-    let startPage = this.currentPage == 1 ? 1 : this.currentPage - 5;
+    let startPage = this.currentPage <= 5 ? 1 : this.currentPage - 5;
 
     if (startPage > this.totalPages - 5) startPage = this.totalPages - 5;
-    console.log("startPage: ", startPage);
     this.view.displayPagination(
       startPage,
       startPage + 9,
@@ -98,12 +96,11 @@ export class IndexController {
       (id) => this.handleDetails(id)
     );
     if (this.currentMovie) {
-      this.view.onDetails(
+      this.view.displayFavorisButton(
         this.currentMovie,
-        inFavoris,
-        () => this.handleBack(),
         (id, title) => this.addFavoris(id, title),
-        (id) => this.removeFavoris(id)
+        (id) => this.removeFavoris(id),
+        inFavoris
       );
     }
   }
@@ -116,7 +113,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchModel = new Search(apiKey);
   const view = new View();
   const controler = new IndexController(searchModel, view, favoris);
-  console.log("favoris: ", controler.favoris.getAll());
   view.displayFavoris(
     favoris.getAll(),
     (id) => controler.removeFavoris(id),
