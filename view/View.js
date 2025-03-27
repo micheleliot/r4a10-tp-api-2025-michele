@@ -132,7 +132,7 @@ export class View {
         link.addEventListener("click", () => onDetails(item.idOmdb));
 
         const removeButton = document.createElement("img");
-        removeButton.src = "../images/croix.svg";
+        removeButton.src = "./images/croix.svg";
         removeButton.addEventListener("click", () => onRemove(item.idOmdb));
 
         li.appendChild(link);
