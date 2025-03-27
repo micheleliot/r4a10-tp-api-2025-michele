@@ -25,7 +25,7 @@ export class View {
         item.Poster && item.Poster !== "N/A"
           ? item.Poster
           : "./images/affiche-non-disponible.jpg";
-      img.alt = `Affiche de ${item.Title}`;
+      img.alt = "./images/affiche-non-disponible.jpg";
 
       const title = document.createElement("p");
       title.textContent = item.Title;
@@ -43,12 +43,12 @@ export class View {
   }
 
   displayDetails(movie, onBack) {
-    this.resultsContainer.innerHTML = "";
     if (movie) {
+      this.resultsContainer.innerHTML = "";
       this.detailsContainer.innerHTML = `
         <h2>${movie.getTitle()} (${movie.getYear()})</h2>
         <div class="details-container">
-          <img src="${movie.getPoster()}" alt="Affiche du film">
+          <img src="${movie.getPoster()}" alt="./images/affiche-non-disponible.jpg">
           <div>
             <p><strong>Genre:</strong> ${movie.getGenre()}</p>
             <p><strong>Durée:</strong> ${movie.getRuntime()}</p>
@@ -65,7 +65,7 @@ export class View {
       document.getElementById("backButton").addEventListener("click", onBack);
       this.displayRatings(movie.ratings);
     } else {
-      this.detailsContainer.innerHTML = `<p>Impossible de charger les détails.</p>`;
+      this.displayProblem("Impossible de charger les détails.");
     }
   }
 
