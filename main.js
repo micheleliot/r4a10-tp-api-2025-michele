@@ -16,4 +16,10 @@ document.addEventListener("DOMContentLoaded", () => {
     (id) => controler.removeFavoris(id),
     (id) => controler.handleDetails(id)
   );
+  view.searchInput.addEventListener("keydown", (event) =>
+    controler.EnterSearch(event)
+  );
+  view.yearInput.addEventListener("keydown", (event) =>
+    controler.EnterSearch(event)
+  );
 });
