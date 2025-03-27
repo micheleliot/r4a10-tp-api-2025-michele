@@ -12,10 +12,15 @@ export class IndexController {
     this.savedResults = [];
     this.currentMovie = null;
     this.view.searchButton.addEventListener("click", () => this.handleSearch());
+    this.view.searchInput.addEventListener("keydown", (event) =>
+      this.EnterSearch(event)
+    );
+    this.view.yearInput.addEventListener("keydown", (event) =>
+      this.EnterSearch(event)
+    );
   }
 
   EnterSearch(event) {
-    console.log("enter click");
     if (event.key === "Enter") {
       this.view.searchButton.click();
     }
