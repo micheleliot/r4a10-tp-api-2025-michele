@@ -13,7 +13,7 @@ export class IndexController {
     this.currentMovie = null;
     this.view.searchButton.addEventListener("click", () => this.handleSearch());
   }
-
+  // récupération des données de l'API et affichage des résultats
   async handleSearch() {
     const query = this.view.searchInput.value.trim();
     const year = this.view.yearInput.value.trim();
@@ -26,8 +26,7 @@ export class IndexController {
       this.currentPage
     );
     if (data == null || data.Response !== "True") {
-      this.view.resultsContainer.innerHTML =
-        "<p>Aucun résultat trouvé ou erreur lors de la recherche.</p>";
+      this.view.displayProblem("Aucun résultat trouvé");
       return;
     } else {
       this.savedResults = data.Search;
@@ -36,7 +35,8 @@ export class IndexController {
       this.view.displayResults(this.savedResults, (id) =>
         this.handleDetails(id)
       );
-      this.addPagination();
+      this.view.disabledFavorisButton();
+      this.pagination(true);
     }
   }
 
@@ -44,18 +44,20 @@ export class IndexController {
     let data = await this.searchModel.searchById(imdbID);
     let movie = new Movie(data, this.favoris);
     this.currentMovie = movie;
-    this.refreshFavoris(this.favoris.isPresent(imdbID));
     this.view.displayFavorisButton(
       movie,
       (id, title) => this.addFavoris(id, title),
-      (id) => this.removeFavoris(id)
+      (id) => this.removeFavoris(id),
+      this.favoris.isPresent(imdbID)
     );
     this.view.displayDetails(movie, () => this.handleBack());
+    this.view.disabledpagination();
   }
-
+  // retour à la liste des résultats apres affichage des détails
   handleBack() {
     this.view.displayResults(this.savedResults, (id) => this.handleDetails(id));
-    this.addPagination();
+    this.view.disabledFavorisButton();
+    this.pagination(true);
   }
 
   handlePageChange(page) {
@@ -63,20 +65,15 @@ export class IndexController {
     this.handleSearch();
   }
 
-  addPagination() {
-    if (this.totalPages > 1) {
-      let startPage = this.currentPage <= 5 ? 1 : this.currentPage - 5;
-      let endPage =
-        (this.totalPages <= 9) | (startPage + 9 > this.totalPages)
-          ? this.totalPages
-          : startPage + 9;
-      this.view.displayPagination(
-        startPage,
-        endPage,
-        this.currentPage,
-        (page) => this.handlePageChange(page)
-      );
-    }
+  pagination() {
+    let startPage = this.currentPage <= 5 ? 1 : this.currentPage - 5;
+    let endPage =
+      (this.totalPages <= 9) | (startPage + 9 > this.totalPages)
+        ? this.totalPages
+        : startPage + 9;
+    this.view.displayPagination(startPage, endPage, this.currentPage, (page) =>
+      this.handlePageChange(page)
+    );
   }
 
   removeFavoris(id) {
@@ -88,7 +85,7 @@ export class IndexController {
     this.favoris.add(id, title);
     this.refreshFavoris(true);
   }
-
+  //réaffichage des favoris après ajout ou suppression
   refreshFavoris(inFavoris) {
     this.view.displayFavoris(
       this.favoris.getAll(),

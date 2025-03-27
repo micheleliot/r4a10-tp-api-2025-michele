@@ -3,6 +3,7 @@ import { Search } from "./modele/Search.js";
 import { View } from "./view/View.js";
 import { Favoris } from "./modele/Favoris.js";
 
+//initialisation des composants de l'application au chargement du DOM
 document.addEventListener("DOMContentLoaded", () => {
   const apiKey = "526ecc96";
   const favoris = new Favoris();

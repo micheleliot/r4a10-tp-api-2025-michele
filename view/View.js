@@ -10,7 +10,7 @@ export class View {
     this.paginationContainer = document.getElementById("paginationContainer");
     this.favorisListContainer = document.getElementById("liste-favoris");
   }
-
+  // affichage de la liste des films ou des series lors d'une recherche
   displayResults(filmList, onClick) {
     this.resultsContainer.innerHTML = "";
     this.detailsContainer.innerHTML = "";
@@ -70,7 +70,10 @@ export class View {
   }
 
   displayFavorisButton(movie, onClickAdd, onClickRmv, inFavoris) {
+    this.detailsFavorisBtn.innerHTML = "";
+    console.log(inFavoris);
     if (!inFavoris) {
+      console.log("add");
       this.detailsFavorisBtn.innerHTML = `
         <button id="addFav" class="favoris-btn">
           <img class ="favoris-icon" src="./images/etoile-vide.svg"> Ajouter aux favoris
@@ -79,6 +82,7 @@ export class View {
         .getElementById("addFav")
         .addEventListener("click", () => onClickAdd(movie.omdbID, movie.title));
     } else {
+      console.log("remove");
       this.detailsFavorisBtn.innerHTML = `
         <button id="rmvFav" class="favoris-btn"">
           <img class ="favoris-icon" src="./images/etoile-pleine.svg"> Supprimer des favoris
@@ -87,6 +91,10 @@ export class View {
         .getElementById("rmvFav")
         .addEventListener("click", () => onClickRmv(movie.omdbID));
     }
+  }
+
+  disabledFavorisButton() {
+    this.detailsFavorisBtn.innerHTML = "";
   }
 
   displayPagination(firstPage, lastPage, currentPage, onPageClick) {
@@ -98,6 +106,9 @@ export class View {
       button.addEventListener("click", () => onPageClick(i));
       this.paginationContainer.appendChild(button);
     }
+  }
+  disabledpagination() {
+    this.paginationContainer.innerHTML = "";
   }
 
   displayFavoris(favorislist, onRemove, onDetails) {
@@ -123,11 +134,16 @@ export class View {
     }
   }
 
+  //affichage des notes d'un film ou d'une serie
   displayRatings(ratings) {
     const ratingsDiv = document.getElementById("ratings");
     ratingsDiv.innerHTML = "<p><strong>Critique:</strong></p>";
     ratings.forEach((rating) => {
       ratingsDiv.innerHTML += `<p>${rating.Source}: ${rating.Value}</p>`;
     });
+  }
+
+  displayProblem(message) {
+    alert("Aucun résultat trouvé ou erreur lors de la recherche.");
   }
 }

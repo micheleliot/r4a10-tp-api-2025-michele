@@ -9,7 +9,7 @@ export class Search {
     if (type !== "all") url += `&type=${type}`;
 
     try {
-      const response = await fetch(url); // Attente de la réponse
+      const response = await fetch(url);
 
       if (!response.ok) {
         throw new Error(`Erreur HTTP: ${response.status}`);

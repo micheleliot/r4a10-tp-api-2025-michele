@@ -185,10 +185,6 @@ h1 {
   text-decoration: underline;
 }
 
-#liste-favoris li span:hover {
-  color: var(--main-green);
-}
-
 #results {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
