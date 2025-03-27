@@ -43,7 +43,7 @@ export class View {
       img.src =
         item.Poster && item.Poster !== "N/A"
           ? item.Poster
-          : "../../images/affiche-non-disponible.jpg"; // Remplacez par le chemin de votre image par défaut
+          : "../images/affiche-non-disponible.jpg";
       img.alt = `Affiche de ${item.Title}`;
       img.style.width = "100%";
       img.style.height = "300px";
@@ -132,7 +132,7 @@ export class View {
         link.addEventListener("click", () => onDetails(item.idOmdb));
 
         const removeButton = document.createElement("img");
-        removeButton.src = "../../images/croix.svg";
+        removeButton.src = "../images/croix.svg";
         removeButton.addEventListener("click", () => onRemove(item.idOmdb));
 
         li.appendChild(link);
