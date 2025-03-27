@@ -1,7 +1,5 @@
-import { Favoris } from "./Favoris.js";
-
 export class Movie {
-  constructor(data, favoris) {
+  constructor(data) {
     this.title = data.Title;
     this.year = data.Year;
     this.poster = data.Poster;

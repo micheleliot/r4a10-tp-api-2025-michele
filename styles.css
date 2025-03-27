@@ -104,17 +104,21 @@ h1 {
   background-color: var(--active-green);
 }
 
+#results {
+  margin-top: 20px;
+}
+
+#paginationContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 /* GIF de chargement (caché par défaut) */
 #bloc-gif-attente {
   display: none;
   margin: 40px;
   text-align: center;
-}
-
-#bloc-resultats p.res::before {
-  /* Affichage d'une flèche devant chaque résultat
-		(Cf. https://unicode-table.com/fr/21E8/ ) */
-  content: "\21E8\00A0";
 }
 
 /* Section de la barre de séparation */

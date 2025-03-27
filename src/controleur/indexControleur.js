@@ -1,7 +1,4 @@
-import { Movie } from "../modèle/Movie.js";
-import { View } from "../view/View.js";
-import { Search } from "../modèle/Search.js";
-import { Favoris } from "../modèle/Favoris.js";
+import { Movie } from "../modele/Movie.js";
 
 export class IndexController {
   constructor(searchModel, view, favoris) {
@@ -48,7 +45,6 @@ export class IndexController {
     let movie = new Movie(data, this.favoris);
     this.currentMovie = movie;
     this.refreshFavoris(this.favoris.isPresent(imdbID));
-    let inFavoris = this.favoris.isPresent(movie.omdbID);
     this.view.displayFavorisButton(
       movie,
       (id, title) => this.addFavoris(id, title),
@@ -58,7 +54,7 @@ export class IndexController {
   }
 
   handleBack() {
-    this.view.displayResults(this.savedResults, () => this.handleDetails());
+    this.view.displayResults(this.savedResults, (id) => this.handleDetails(id));
     this.addPagination();
   }
 
@@ -68,15 +64,19 @@ export class IndexController {
   }
 
   addPagination() {
-    let startPage = this.currentPage <= 5 ? 1 : this.currentPage - 5;
-
-    if (startPage > this.totalPages - 5) startPage = this.totalPages - 5;
-    this.view.displayPagination(
-      startPage,
-      startPage + 9,
-      this.currentPage,
-      (page) => this.handlePageChange(page)
-    );
+    if (this.totalPages > 1) {
+      let startPage = this.currentPage <= 5 ? 1 : this.currentPage - 5;
+      let endPage =
+        (this.totalPages <= 9) | (startPage + 9 > this.totalPages)
+          ? this.totalPages
+          : startPage + 9;
+      this.view.displayPagination(
+        startPage,
+        endPage,
+        this.currentPage,
+        (page) => this.handlePageChange(page)
+      );
+    }
   }
 
   removeFavoris(id) {
@@ -105,17 +105,3 @@ export class IndexController {
     }
   }
 }
-
-// Initialisation
-document.addEventListener("DOMContentLoaded", () => {
-  const apiKey = "526ecc96";
-  const favoris = new Favoris();
-  const searchModel = new Search(apiKey);
-  const view = new View();
-  const controler = new IndexController(searchModel, view, favoris);
-  view.displayFavoris(
-    favoris.getAll(),
-    (id) => controler.removeFavoris(id),
-    (id) => controler.handleDetails(id)
-  );
-});
