@@ -232,6 +232,12 @@ h1 {
   gap: 20px;
 }
 
+.details-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
 .details-container img {
   max-width: 300px;
   height: auto;
